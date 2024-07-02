@@ -38,6 +38,11 @@ class Car {
       this.speed += this.friction;
     }
 
+    // Car stop
+    if (Math.abs(this.speed) < this.friction) {
+      this.speed = 0;
+    }
+
     this.y -= this.speed;
 
     if (this.controls.left) {
