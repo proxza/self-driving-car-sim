@@ -116,6 +116,12 @@ class Car {
     // ctx.fill();
     // ctx.restore();
 
+    if (this.damaged) {
+      ctx.fillStyle = "red";
+    } else {
+      ctx.fillStyle = "black";
+    }
+
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
 
