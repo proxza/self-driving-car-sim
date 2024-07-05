@@ -21,3 +21,5 @@ function getIntersection(A, B, C, D) {
 
   return null;
 }
+
+function polysIntersect(poly1, poly2) {}
