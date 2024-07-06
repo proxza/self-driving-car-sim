@@ -12,22 +12,33 @@ class Car {
     this.angle = 0;
     this.damaged = false;
 
-    this.sensor = new Sensor(this);
+    if (controlType != "BOT") {
+      this.sensor = new Sensor(this);
+    }
     this.controls = new Controls(controlType);
   }
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     if (!this.damaged) {
       this.#move();
       this.polygon = this.#createPolygon();
-      this.damaged = this.#assessDamage(roadBorders);
+      this.damaged = this.#assessDamage(roadBorders, traffic);
     }
-    this.sensor.update(roadBorders);
+
+    if (this.sensor) {
+      this.sensor.update(roadBorders, traffic);
+    }
   }
 
-  #assessDamage(roadBorders) {
+  #assessDamage(roadBorders, traffic) {
     for (let i = 0; i < roadBorders.length; i++) {
       if (polysIntersect(this.polygon, roadBorders[i])) {
+        return true;
+      }
+    }
+
+    for (let i = 0; i < traffic.length; i++) {
+      if (polysIntersect(this.polygon, traffic[i].polygon)) {
         return true;
       }
     }
@@ -133,6 +144,8 @@ class Car {
 
     ctx.fill();
 
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 }
