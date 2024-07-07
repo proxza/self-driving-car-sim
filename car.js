@@ -118,21 +118,11 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx) {
-    // ctx.save();
-    // ctx.translate(this.x, this.y);
-    // ctx.rotate(-this.angle);
-
-    // ctx.beginPath();
-    // ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
-
-    // ctx.fill();
-    // ctx.restore();
-
+  draw(ctx, color) {
     if (this.damaged) {
       ctx.fillStyle = "red";
     } else {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
     }
 
     ctx.beginPath();
