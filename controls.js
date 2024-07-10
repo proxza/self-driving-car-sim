@@ -9,7 +9,7 @@ class Controls {
       case "KEYS":
         this.#addKeyboardListeners();
         break;
-      case "BOT":
+      case "DUMMY":
         this.forward = true;
         break;
     }
@@ -32,7 +32,6 @@ class Controls {
           break;
       }
     };
-
     document.onkeyup = (event) => {
       switch (event.key) {
         case "ArrowLeft":

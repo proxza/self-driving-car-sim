@@ -1,5 +1,5 @@
 class Car {
-  constructor(x, y, width, height, controlType, maxSpeed) {
+  constructor(x, y, width, height, controlType, maxSpeed = 3) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -14,7 +14,7 @@ class Car {
 
     this.useBrain = controlType == "AI";
 
-    if (controlType != "BOT") {
+    if (controlType != "DUMMY") {
       this.sensor = new Sensor(this);
       this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
@@ -27,7 +27,6 @@ class Car {
       this.polygon = this.#createPolygon();
       this.damaged = this.#assessDamage(roadBorders, traffic);
     }
-
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
       const offsets = this.sensor.readings.map((s) => (s == null ? 0 : 1 - s.offset));
@@ -48,7 +47,6 @@ class Car {
         return true;
       }
     }
-
     for (let i = 0; i < traffic.length; i++) {
       if (polysIntersect(this.polygon, traffic[i].polygon)) {
         return true;
@@ -61,27 +59,22 @@ class Car {
     const points = [];
     const rad = Math.hypot(this.width, this.height) / 2;
     const alpha = Math.atan2(this.width, this.height);
-
     points.push({
       x: this.x - Math.sin(this.angle - alpha) * rad,
       y: this.y - Math.cos(this.angle - alpha) * rad,
     });
-
     points.push({
       x: this.x - Math.sin(this.angle + alpha) * rad,
       y: this.y - Math.cos(this.angle + alpha) * rad,
     });
-
     points.push({
       x: this.x - Math.sin(Math.PI + this.angle - alpha) * rad,
       y: this.y - Math.cos(Math.PI + this.angle - alpha) * rad,
     });
-
     points.push({
       x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
       y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
     });
-
     return points;
   }
 
@@ -89,7 +82,6 @@ class Car {
     if (this.controls.forward) {
       this.speed += this.acceleration;
     }
-
     if (this.controls.reverse) {
       this.speed -= this.acceleration;
     }
@@ -97,7 +89,6 @@ class Car {
     if (this.speed > this.maxSpeed) {
       this.speed = this.maxSpeed;
     }
-
     if (this.speed < -this.maxSpeed / 2) {
       this.speed = -this.maxSpeed / 2;
     }
@@ -105,12 +96,9 @@ class Car {
     if (this.speed > 0) {
       this.speed -= this.friction;
     }
-
     if (this.speed < 0) {
       this.speed += this.friction;
     }
-
-    // Car stop
     if (Math.abs(this.speed) < this.friction) {
       this.speed = 0;
     }
@@ -120,7 +108,6 @@ class Car {
       if (this.controls.left) {
         this.angle += 0.03 * flip;
       }
-
       if (this.controls.right) {
         this.angle -= 0.03 * flip;
       }
@@ -132,18 +119,15 @@ class Car {
 
   draw(ctx, color) {
     if (this.damaged) {
-      ctx.fillStyle = "red";
+      ctx.fillStyle = "gray";
     } else {
       ctx.fillStyle = color;
     }
-
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-
     for (let i = 1; i < this.polygon.length; i++) {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
     }
-
     ctx.fill();
 
     if (this.sensor) {

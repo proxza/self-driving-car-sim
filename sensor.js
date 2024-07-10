@@ -31,7 +31,6 @@ class Sensor {
       const poly = traffic[i].polygon;
       for (let j = 0; j < poly.length; j++) {
         const value = getIntersection(ray[0], ray[1], poly[j], poly[(j + 1) % poly.length]);
-
         if (value) {
           touches.push(value);
         }
@@ -53,7 +52,10 @@ class Sensor {
       const rayAngle = lerp(this.raySpread / 2, -this.raySpread / 2, this.rayCount == 1 ? 0.5 : i / (this.rayCount - 1)) + this.car.angle;
 
       const start = { x: this.car.x, y: this.car.y };
-      const end = { x: this.car.x - Math.sin(rayAngle) * this.rayLength, y: this.car.y - Math.cos(rayAngle) * this.rayLength };
+      const end = {
+        x: this.car.x - Math.sin(rayAngle) * this.rayLength,
+        y: this.car.y - Math.cos(rayAngle) * this.rayLength,
+      };
       this.rays.push([start, end]);
     }
   }
